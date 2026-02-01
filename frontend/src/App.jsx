@@ -22,6 +22,10 @@ const calculateScore = async (payload) => {
     setLoading(false);
   }
 };
+const openScorecardFromLeaderboard = (score) => {
+    setScoreData(score);
+    setView('result');
+};
 
   return (
     <div className="min-h-screen pb-20">
@@ -74,11 +78,11 @@ const calculateScore = async (payload) => {
           </div>
         )}
 
-        {view === 'leaderboard' && (
-          <div className="animate-fade-in">
-            <Leaderboard />
-          </div>
-        )}
+       {view === 'leaderboard' && (
+  <div className="animate-fade-in">
+    <Leaderboard onViewScorecard={openScorecardFromLeaderboard} />
+  </div>
+)}
       </main>
     </div>
   );
