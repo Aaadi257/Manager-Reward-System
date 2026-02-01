@@ -1,13 +1,33 @@
+# ======================
 # Python
+# ======================
 backend/venv/
 __pycache__/
+*.pyc
 
-# Node
+# ======================
+# Node / Frontend
+# ======================
 frontend/node_modules/
+dist/
+build/
 
-# Env
+# ======================
+# Environment variables
+# ======================
 .env
+*.env
 frontend/.env
+backend/.env
 
-# OS
+# ======================
+# Local / runtime data
+# ======================
+backend/submissions.json
+
+# ======================
+# OS / Editor
+# ======================
 .DS_Store
+.vscode/
+.idea/
