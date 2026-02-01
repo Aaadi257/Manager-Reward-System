@@ -3,9 +3,10 @@ import React, { useEffect, useState } from 'react';
 const Leaderboard = ({ onViewScorecard }) => {   // ✅ accept callback
   const [scores, setScores] = useState([]);
   const [loading, setLoading] = useState(true);
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
-    fetch('http://127.0.0.1:8001/api/leaderboard') // ⚠️ use correct port / live URL later
+    fetch(`${API_BASE_URL}/api/leaderboard`)
       .then(res => res.json())
       .then(data => {
         setScores(data);
