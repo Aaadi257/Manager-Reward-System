@@ -1,0 +1,112 @@
+[
+  {
+    "manager_name": "Manish",
+    "mall_name": "NSP",
+    "total_score": 74.0,
+    "breakdown": [
+      {
+        "metric_name": "Google Rating",
+        "score": 9.0,
+        "max_score": 10.0,
+        "details": "Avg: 3.95"
+      },
+      {
+        "metric_name": "Zomato & Swiggy Rating",
+        "score": 10.0,
+        "max_score": 10.0,
+        "details": "Avg: 4.05"
+      },
+      {
+        "metric_name": "Food Cost",
+        "score": 16.0,
+        "max_score": 20.0,
+        "details": "Amritsari: 9, Cafe: 7"
+      },
+      {
+        "metric_name": "Online Activity",
+        "score": 8.0,
+        "max_score": 10.0,
+        "details": "Avg: 97.0%"
+      },
+      {
+        "metric_name": "Kitchen Prep Time",
+        "score": 9.0,
+        "max_score": 12.0,
+        "details": "Avg: 15.2 min"
+      },
+      {
+        "metric_name": "Bad & Delay Orders",
+        "score": 7.0,
+        "max_score": 10.0,
+        "details": "Bad Pts: 4, Delay Pts: 3"
+      },
+      {
+        "metric_name": "Outlet Audit",
+        "score": 12.0,
+        "max_score": 20.0,
+        "details": "Amritsari: 10, Cafe: 14"
+      },
+      {
+        "metric_name": "Add-on Sale",
+        "score": 3.0,
+        "max_score": 12.0,
+        "details": "Amritsari: 0, Cafe: 6"
+      }
+    ]
+  },
+  {
+    "manager_name": "Aadi",
+    "mall_name": "MOD",
+    "total_score": 86.0,
+    "breakdown": [
+      {
+        "metric_name": "Google Rating",
+        "score": 8.0,
+        "max_score": 10.0,
+        "details": "Avg: 3.85"
+      },
+      {
+        "metric_name": "Zomato & Swiggy Rating",
+        "score": 8.0,
+        "max_score": 10.0,
+        "details": "Avg: 3.88"
+      },
+      {
+        "metric_name": "Food Cost",
+        "score": 17.0,
+        "max_score": 20.0,
+        "details": "Amritsari: 8, Cafe: 9"
+      },
+      {
+        "metric_name": "Online Activity",
+        "score": 10.0,
+        "max_score": 10.0,
+        "details": "Avg: 98.2%"
+      },
+      {
+        "metric_name": "Kitchen Prep Time",
+        "score": 10.0,
+        "max_score": 12.0,
+        "details": "Avg: 13.9 min"
+      },
+      {
+        "metric_name": "Bad & Delay Orders",
+        "score": 10.0,
+        "max_score": 10.0,
+        "details": "Bad Pts: 5, Delay Pts: 5"
+      },
+      {
+        "metric_name": "Outlet Audit",
+        "score": 11.0,
+        "max_score": 20.0,
+        "details": "Amritsari: 12, Cafe: 10"
+      },
+      {
+        "metric_name": "Add-on Sale",
+        "score": 12.0,
+        "max_score": 12.0,
+        "details": "Amritsari: 12, Cafe: 12"
+      }
+    ]
+  }
+]
