@@ -1,6 +1,10 @@
-from pydantic import BaseModel, Field
-from typing import List
+from pydantic import BaseModel
+from typing import List, Optional
 
+
+# ---------------------------
+# Outlet-level input metrics
+# ---------------------------
 class OutletMetrics(BaseModel):
     name: str
     google_rating: float
@@ -17,18 +21,31 @@ class OutletMetrics(BaseModel):
     total_sale: float
     add_on_sale: float
 
+
+# ---------------------------
+# Main input from frontend
+# ---------------------------
 class ManagerInput(BaseModel):
     manager_name: str
     mall_name: str
+    month: Optional[str] = None   # ✅ month selector (e.g. "2026-02")
     amritsari_express: OutletMetrics
     cafe_chennai: OutletMetrics
 
+
+# ---------------------------
+# Score breakdown per metric
+# ---------------------------
 class ScoreBreakdown(BaseModel):
     metric_name: str
     score: float
     max_score: float
     details: str
 
+
+# ---------------------------
+# Final scorecard output
+# ---------------------------
 class ScoreCard(BaseModel):
     manager_name: str
     mall_name: str
