@@ -6,27 +6,31 @@ const Leaderboard = ({ onViewScorecard }) => {
 
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const [month, setMonth] = useState("");
+  const [managerOfMonth, setManagerOfMonth] = useState(null);
 
-useEffect(() => {
-  const query = month ? `?month=${month}` : "";
-  fetch(`${API_BASE_URL}/api/leaderboard${query}`)
-    .then(res => res.json())
-    .then(setScores);
-}, [month]);
-
-  // Fetch leaderboard on load
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/leaderboard`)
-      .then((res) => res.json())
-      .then((data) => {
-        setScores(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
-        setLoading(false);
-      });
-  }, []);
+  setLoading(true);
+  if (month) {
+  fetch(`${API_BASE_URL}/api/manager-of-the-month?month=${month}`)
+    .then(res => res.json())
+    .then(data => setManagerOfMonth(data));
+} else {
+  setManagerOfMonth(null);
+}
+
+  const query = month ? `?month=${month}` : "";
+
+  fetch(`${API_BASE_URL}/api/leaderboard${query}`)
+    .then((res) => res.json())
+    .then((data) => {
+      setScores(data);
+      setLoading(false);
+    })
+    .catch((err) => {
+      console.error(err);
+      setLoading(false);
+    });
+}, [month]);
 
   // Remove score from leaderboard
   <select
@@ -35,8 +39,9 @@ useEffect(() => {
   className="input mb-4"
 >
   <option value="">All / Testing</option>
-  <option value="2026-02">Feb 2026</option>
-  <option value="2026-03">Mar 2026</option>
+  <option value="2026-01">January 2026</option>
+  <option value="2026-02">February 2026</option>
+  <option value="2026-03">March 2026</option>
 </select>
   const handleDelete = async (id) => {
     const confirmDelete = window.confirm(
@@ -80,6 +85,19 @@ useEffect(() => {
               <th className="p-4 text-right">Actions</th>
             </tr>
           </thead>
+          {managerOfMonth && (
+  <div className="mb-6 p-4 rounded-lg bg-yellow-500/10 border border-yellow-500/30">
+    <h3 className="text-lg font-bold text-yellow-400">
+      🏆 Manager of the Month
+    </h3>
+    <p className="text-slate-300">
+      {managerOfMonth.manager_name} — {managerOfMonth.mall_name}
+    </p>
+    <p className="text-yellow-400 font-semibold">
+      Score: {managerOfMonth.total_score.toFixed(1)}
+    </p>
+  </div>
+)}
 
           <tbody className="divide-y divide-slate-800">
             {scores.length === 0 ? (
@@ -101,9 +119,15 @@ useEffect(() => {
                     #{idx + 1}
                   </td>
 
-                  <td className="p-4 font-medium text-white">
-                    {s.manager_name}
-                  </td>
+                  <td className="p-4 font-medium text-white flex items-center gap-2">
+  {s.manager_name}
+
+  {managerOfMonth && s.id === managerOfMonth.id && (
+    <span className="px-2 py-0.5 text-xs rounded-full bg-yellow-500 text-black font-semibold">
+      🏆 Manager of the Month
+    </span>
+  )}
+</td>
 
                   <td className="p-4 text-slate-300">
                     {s.mall_name}
