@@ -34,7 +34,25 @@ const initialOutletState = {
     total_sale: '',
     add_on_sale: ''
 };
-
+{/* Month selector */}
+<div>
+  <label className="block text-sm text-slate-400 mb-1">
+    Month (optional)
+  </label>
+  <select
+    value={form.month || ""}
+    onChange={(e) =>
+      setForm({ ...form, month: e.target.value || null })
+    }
+    className="w-full bg-slate-900 border border-slate-700 rounded-md p-2 text-white"
+  >
+    <option value="">-- Select Month (optional) --</option>
+    <option value="2026-01">January 2026</option>
+    <option value="2026-02">February 2026</option>
+    <option value="2026-03">March 2026</option>
+    {/* add more as needed */}
+  </select>
+</div>
 const ScoreForm = ({ onCalculate, loading }) => {
     const [managerName, setManagerName] = useState('');
     const [mallName, setMallName] = useState('');

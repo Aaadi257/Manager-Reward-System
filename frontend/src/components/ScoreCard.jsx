@@ -12,6 +12,11 @@ const ScoreCard = ({ data, onSave, onDismiss }) => {
       <div className="text-center border-b border-slate-700/50 pb-6">
         <h2 className="text-3xl font-bold text-white mb-2">{data.manager_name}</h2>
         <p className="text-slate-400 text-lg">{data.mall_name}</p>
+        {data.month && (
+  <p className="text-slate-500 text-sm mt-1">
+    Month: {data.month}
+  </p>
+)}
         <div className="mt-6 flex flex-col items-center">
           <span className="text-slate-500 uppercase tracking-widest text-sm font-semibold">
             Total Score
