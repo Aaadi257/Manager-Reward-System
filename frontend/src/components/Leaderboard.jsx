@@ -1,22 +1,44 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-const Leaderboard = ({ onViewScorecard }) => {   // ✅ accept callback
+const Leaderboard = ({ onViewScorecard }) => {
   const [scores, setScores] = useState([]);
   const [loading, setLoading] = useState(true);
+
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+  // Fetch leaderboard on load
   useEffect(() => {
     fetch(`${API_BASE_URL}/api/leaderboard`)
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         setScores(data);
         setLoading(false);
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
         setLoading(false);
       });
   }, []);
+
+  // Remove score from leaderboard
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm(
+      "Remove this score from the leaderboard?"
+    );
+    if (!confirmDelete) return;
+
+    try {
+      await fetch(`${API_BASE_URL}/api/score/${id}`, {
+        method: "DELETE",
+      });
+
+      // Update UI immediately
+      setScores((prev) => prev.filter((s) => s.id !== id));
+    } catch (err) {
+      console.error(err);
+      alert("Failed to remove score");
+    }
+  };
 
   if (loading) {
     return (
@@ -38,21 +60,24 @@ const Leaderboard = ({ onViewScorecard }) => {   // ✅ accept callback
               <th className="p-4">Manager</th>
               <th className="p-4">Mall</th>
               <th className="p-4 text-right">Score</th>
-              <th className="p-4 text-right">Action</th> {/* ✅ new column */}
+              <th className="p-4 text-right">Actions</th>
             </tr>
           </thead>
 
           <tbody className="divide-y divide-slate-800">
             {scores.length === 0 ? (
               <tr>
-                <td colSpan="5" className="p-4 text-center text-slate-500">
+                <td
+                  colSpan="5"
+                  className="p-4 text-center text-slate-500"
+                >
                   No scores yet.
                 </td>
               </tr>
             ) : (
               scores.map((s, idx) => (
                 <tr
-                  key={idx}
+                  key={s.id}
                   className="hover:bg-slate-800/30 transition-colors"
                 >
                   <td className="p-4 text-slate-500 font-mono">
@@ -71,16 +96,26 @@ const Leaderboard = ({ onViewScorecard }) => {   // ✅ accept callback
                     {s.total_score.toFixed(1)}
                   </td>
 
-                  {/* ✅ VIEW SCORECARD BUTTON */}
                   <td className="p-4 text-right">
-                    <button
-                      onClick={() => onViewScorecard(s)}
-                      className="px-3 py-1.5 text-sm rounded-md 
-                                 bg-indigo-600 hover:bg-indigo-500 
-                                 text-white transition"
-                    >
-                      View
-                    </button>
+                    <div className="flex justify-end gap-2">
+                      <button
+                        onClick={() => onViewScorecard(s)}
+                        className="px-3 py-1.5 text-sm rounded-md 
+                                   bg-indigo-600 hover:bg-indigo-500 
+                                   text-white transition"
+                      >
+                        View
+                      </button>
+
+                      <button
+                        onClick={() => handleDelete(s.id)}
+                        className="px-3 py-1.5 text-sm rounded-md 
+                                   bg-red-600 hover:bg-red-500 
+                                   text-white transition"
+                      >
+                        Remove
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))
