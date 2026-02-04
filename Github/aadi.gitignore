@@ -24,6 +24,7 @@ backend/.env
 # Local / runtime data
 # ======================
 backend/submissions.json
+backend/db.py
 
 # ======================
 # OS / Editor
