@@ -72,6 +72,11 @@ def save_score(score: ScoreCard):
         return {"message": "Score saved successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+@app.delete("/api/score/{score_id}")
+def delete_score(score_id: int):
+    cur.execute("DELETE FROM scores WHERE id = %s", (score_id,))
+    conn.commit()
+    return {"message": "Score removed"}
 
 # ✅ READ LEADERBOARD FROM DATABASE
 @app.get("/api/leaderboard")
