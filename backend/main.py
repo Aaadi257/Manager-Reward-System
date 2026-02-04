@@ -44,29 +44,34 @@ def root():
 
 # ✅ SAVE SCORE TO DATABASE
 @app.post("/api/calculate-score", response_model=ScoreCard)
-def calculate_and_save_score(data: ManagerInput):
+def calculate_score_only(data: ManagerInput):
+    """
+    Calculates the score but DOES NOT save it.
+    """
+    result = calculate_score(data)
+    return result
+@app.post("/api/save-score")
+def save_score(score: ScoreCard):
+    """
+    Saves a score to the leaderboard (PostgreSQL).
+    """
     try:
-        result = calculate_score(data)
-
         cur.execute(
             """
             INSERT INTO scores (manager_name, mall_name, total_score, breakdown)
             VALUES (%s, %s, %s, %s)
             """,
             (
-                data.manager_name,
-                data.mall_name,
-                result.total_score,
-                result.model_dump()  # use .dict() if pydantic v1
+                score.manager_name,
+                score.mall_name,
+                score.total_score,
+                score.dict()
             )
         )
         conn.commit()
-
-        return result
-
+        return {"message": "Score saved successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
 
 # ✅ READ LEADERBOARD FROM DATABASE
 @app.get("/api/leaderboard")
