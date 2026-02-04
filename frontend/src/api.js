@@ -1,17 +1,19 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export async function calculateScore(payload) {
-  const response = await fetch(`${API_BASE_URL}/api/calculate-score`, {
+export async function saveScore(scoreData) {
+  const res = await fetch(`${API_BASE_URL}/api/save-score`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
+    body: JSON.stringify(scoreData),
   });
+  if (!res.ok) throw new Error("Failed to save score");
+}
 
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(data.detail || "Error calculating score");
-  }
+export async function deleteScore(scoreId) {
+  const res = await fetch(`${API_BASE_URL}/api/score/${scoreId}`, {
+    method: "DELETE",
+  });
+  if (!res.ok) throw new Error("Failed to delete score");
+}
 
   return data;
-}

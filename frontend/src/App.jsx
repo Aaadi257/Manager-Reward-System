@@ -3,6 +3,16 @@ import ScoreForm from './components/ScoreForm';
 import ScoreCard from './components/ScoreCard';
 import Leaderboard from './components/Leaderboard';
 import { calculateScore as calculateScoreAPI } from "./api";
+import { saveScore } from "./api";
+
+const handleSaveScore = async () => {
+  try {
+    await saveScore(scoreData);
+    setView("leaderboard");
+  } catch (e) {
+    alert("Failed to save score");
+  }
+};
 
 function App() {
   const [view, setView] = useState('form'); // form, result, leaderboard
@@ -74,7 +84,11 @@ const openScorecardFromLeaderboard = (score) => {
                 <span>← Back to Calculator</span>
               </button>
             </div>
-            <ScoreCard data={scoreData} onReset={() => setView('form')} />
+            <ScoreCard
+  data={scoreData}
+  onSave={handleSaveScore}
+  onDismiss={() => setView('form')}
+/>
           </div>
         )}
 
