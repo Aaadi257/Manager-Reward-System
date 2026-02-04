@@ -6,14 +6,18 @@ export async function saveScore(scoreData) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(scoreData),
   });
+
   if (!res.ok) throw new Error("Failed to save score");
+
+  return res.json(); // ✅ return INSIDE function (optional)
 }
 
 export async function deleteScore(scoreId) {
   const res = await fetch(`${API_BASE_URL}/api/score/${scoreId}`, {
     method: "DELETE",
   });
-  if (!res.ok) throw new Error("Failed to delete score");
-}
 
-  return data;
+  if (!res.ok) throw new Error("Failed to delete score");
+
+  return res.json(); // ✅ optional
+}
