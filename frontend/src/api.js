@@ -9,7 +9,7 @@ export async function saveScore(scoreData) {
 
   if (!res.ok) throw new Error("Failed to save score");
 
-  return res.json(); // ✅ return INSIDE function (optional)
+  return await res.json();
 }
 
 export async function deleteScore(scoreId) {
@@ -19,5 +19,5 @@ export async function deleteScore(scoreId) {
 
   if (!res.ok) throw new Error("Failed to delete score");
 
-  return res.json(); // ✅ optional
+  return await res.json();
 }
