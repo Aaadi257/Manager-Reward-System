@@ -1,5 +1,6 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
+from typing import Optional
 
 try:
     from .models import ManagerInput, ScoreCard
@@ -44,18 +45,28 @@ conn.commit()
 def root():
     return {"message": "Backend is running"}
 
-# ✅ SAVE SCORE TO DATABASE
+# ------------------------------------------------
+# 1️⃣ CALCULATE SCORE (NO SAVE)
+# ------------------------------------------------
 @app.post("/api/calculate-score", response_model=ScoreCard)
 def calculate_score_only(data: ManagerInput):
     """
-    Calculates the score but DOES NOT save it.
+    Calculates score but does NOT save it.
     """
     result = calculate_score(data)
+
+    # ensure month flows into scorecard
+    result.month = data.month
+
     return result
+
+# ------------------------------------------------
+# 2️⃣ SAVE SCORE (EXPLICIT ACTION)
+# ------------------------------------------------
 @app.post("/api/save-score")
-def save_score(score: ScoreCard, month: str | None = None):
+def save_score(score: ScoreCard):
     """
-    Saves a score to the leaderboard (PostgreSQL).
+    Saves a score to PostgreSQL leaderboard.
     """
     try:
         cur.execute(
@@ -67,9 +78,9 @@ def save_score(score: ScoreCard, month: str | None = None):
             (
                 score.manager_name,
                 score.mall_name,
-                month,
+                score.month,                     # ✅ month saved here
                 score.total_score,
-                [b.dict() for b in score.breakdown]  # ✅ breakdown only
+                [b.dict() for b in score.breakdown]  # ✅ list[dict]
             )
         )
 
@@ -83,15 +94,21 @@ def save_score(score: ScoreCard, month: str | None = None):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+# ------------------------------------------------
+# 3️⃣ DELETE SCORE
+# ------------------------------------------------
 @app.delete("/api/score/{score_id}")
 def delete_score(score_id: int):
     cur.execute("DELETE FROM scores WHERE id = %s", (score_id,))
     conn.commit()
     return {"message": "Score removed"}
 
-# ✅ READ LEADERBOARD FROM DATABASE
+# ------------------------------------------------
+# 4️⃣ LEADERBOARD (MONTH FILTER)
+# ------------------------------------------------
 @app.get("/api/leaderboard")
-def get_leaderboard(month: str | None = None):
+def get_leaderboard(month: Optional[str] = Query(None)):
     if month:
         cur.execute(
             """
@@ -103,6 +120,7 @@ def get_leaderboard(month: str | None = None):
             (month,)
         )
     else:
+        # Testing / All months
         cur.execute(
             """
             SELECT id, manager_name, mall_name, month, total_score, breakdown
@@ -124,3 +142,30 @@ def get_leaderboard(month: str | None = None):
         }
         for r in rows
     ]
+@app.get("/api/manager-of-the-month")
+def manager_of_the_month(month: str):
+    """
+    Returns the top manager for a given month.
+    """
+    cur.execute(
+        """
+        SELECT id, manager_name, mall_name, total_score
+        FROM scores
+        WHERE month = %s
+        ORDER BY total_score DESC
+        LIMIT 1
+        """,
+        (month,)
+    )
+
+    row = cur.fetchone()
+
+    if not row:
+        return None
+
+    return {
+        "id": row[0],
+        "manager_name": row[1],
+        "mall_name": row[2],
+        "total_score": row[3]
+    }
