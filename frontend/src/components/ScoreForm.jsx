@@ -1,5 +1,23 @@
 import React, { useState } from 'react';
 
+const months = [
+  "2026-01",
+  "2026-02",
+  "2026-03",
+  "2026-04"
+];
+
+<select
+  value={form.month}
+  onChange={e => setForm({ ...form, month: e.target.value })}
+  className="input"
+>
+  <option value="">Testing / No month</option>
+  {months.map(m => (
+    <option key={m} value={m}>{m}</option>
+  ))}
+</select>
+
 const initialOutletState = {
     name: '',
     google_rating: '',
@@ -74,6 +92,7 @@ const ScoreForm = ({ onCalculate, loading }) => {
         };
 
         onCalculate(payload);
+        onCalculate(form)
     };
 
     const InputSection = ({ title, amritsariVal, cafeVal, field, type = "number" }) => (

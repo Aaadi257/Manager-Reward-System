@@ -5,6 +5,14 @@ const Leaderboard = ({ onViewScorecard }) => {
   const [loading, setLoading] = useState(true);
 
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const [month, setMonth] = useState("");
+
+useEffect(() => {
+  const query = month ? `?month=${month}` : "";
+  fetch(`${API_BASE_URL}/api/leaderboard${query}`)
+    .then(res => res.json())
+    .then(setScores);
+}, [month]);
 
   // Fetch leaderboard on load
   useEffect(() => {
@@ -21,6 +29,15 @@ const Leaderboard = ({ onViewScorecard }) => {
   }, []);
 
   // Remove score from leaderboard
+  <select
+  value={month}
+  onChange={e => setMonth(e.target.value)}
+  className="input mb-4"
+>
+  <option value="">All / Testing</option>
+  <option value="2026-02">Feb 2026</option>
+  <option value="2026-03">Mar 2026</option>
+</select>
   const handleDelete = async (id) => {
     const confirmDelete = window.confirm(
       "Remove this score from the leaderboard?"
